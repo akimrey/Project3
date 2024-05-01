@@ -46,6 +46,20 @@ async def get_film(id: int):
         else:
             raise HTTPException(status_code=404, detail="Film not found")
 
+@app.delete("/api/v1/film/{id}")
+async def delete_film(id: int):
+    Film = await auto_models.get("film")
+
+    async with AsyncSession(engine) as session:
+        result = await session.execute(select(Film).where(Film.film_id == id))
+        film = result.scalars().first()
+        if film:
+            await session.delete(film)
+            await session.commit()
+            return {"ok": True}
+        else:
+            return {"ok": False, "reason": "not found"}
+
 @app.get("/api/v1/films")
 async def films():
     Film = await auto_models.get("film")
