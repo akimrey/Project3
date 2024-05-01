@@ -5,6 +5,6 @@ app = FastAPI()
 
 @app.get("/api/v1/hello")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hello": "Humans"}
 
 app.mount("/", StaticFiles(directory="ui/dist", html=True), name="ui")

@@ -5,13 +5,14 @@ description = ""
 authors = ["akimrey <akimrey@unca.edu>"]
 readme = "README.md"
 
-[tool.poetry.scripts]
-check-style = "black . && isort . && flake8 ."
 
 [tool.poetry.dependencies]
 python = "^3.9"
 fastapi = "^0.110.2"
 uvicorn = "^0.29.0"
+
+[tool.poetry.scripts]
+check-style = "check_code:main"
 
 
 [tool.poetry.group.dev.dependencies]
