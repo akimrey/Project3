@@ -47,5 +47,4 @@ async def films():
             )
     return results
 
-
 app.mount("/", StaticFiles(directory="ui/dist", html=True), name="ui")
