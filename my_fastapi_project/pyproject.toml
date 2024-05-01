@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "my-fastapi-project"
+version = "0.1.0"
+description = ""
+authors = ["akimrey <akimrey@unca.edu>"]
+readme = "README.md"
+
+[tool.poetry.scripts]
+check-style = "black . && isort . && flake8 ."
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.110.2"
+uvicorn = "^0.29.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.2"
+isort = "^5.13.2"
+flake8 = "^7.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
