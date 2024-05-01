@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -6,3 +7,4 @@ app = FastAPI()
 def read_root():
     return {"Hello": "World"}
 
+app.mount("/", StaticFiles(directory="ui/dist", html=True), name="ui")
