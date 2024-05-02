@@ -1,2 +1,3 @@
-my_fastapi_project/ui/node_modules/
-my_fastapi_project/ui/dist/
+ui/node_modules/
+ui/dist/
+__pycache__/
