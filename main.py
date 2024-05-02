@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.future import select
+from fastapi.responses import HTMLResponse
 
 from models import AutoModels
 
@@ -23,7 +24,11 @@ async def lifespan(app):
 
 app = FastAPI(lifespan=lifespan)
 
-
+@app.get("/film/{id}", response_class=HTMLResponse)
+async def film(id: int):
+    with open("ui/dist/film.html") as file:
+        return file.read()
+        
 @app.get("/api/v1/hello")
 async def root():
     return {"message": "Hello World"}
@@ -46,6 +51,5 @@ async def films():
                 }
             )
     return results
-
 
 app.mount("/", StaticFiles(directory="ui/dist", html=True), name="ui")
