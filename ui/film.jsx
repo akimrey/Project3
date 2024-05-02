@@ -1,79 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
 
-async function fetchFilmData(id) {
-  const response = await fetch(`/api/v1/film/${id}`);
-  if (response.ok) {
-    return await response.json();
-  } else {
-    throw new Error('Failed to fetch film data');
-  }
-}
-
-async function deleteFilm(id) {
-  const response = await fetch(`/api/v1/film/${id}`, { method: 'DELETE' });
-  if (response.ok) {
-    return await response.json();
-  } else {
-    throw new Error('Failed to delete film');
-  }
-}
-
-function FilmView() {
-  const [film, setFilm] = useState(null);
-  const [error, setError] = useState('');
-  const [deleted, setDeleted] = useState(false);
-
-  useEffect(() => {
-    const filmId = window.location.pathname.split('/').pop();
-    if (!deleted) {
-      fetchFilmData(filmId)
-        .then(setFilm)
-        .catch(e => setError(e.message));
-    }
-  }, [deleted]);
-
-  const handleDelete = async () => {
-    const filmId = window.location.pathname.split('/').pop();
+async function fetchFilmData() {
     try {
-      const deleteResponse = await deleteFilm(filmId);
-      if (deleteResponse.ok) {
-        setDeleted(true);
-        alert('Film deleted successfully');
-        window.location.href = '/';  // Redirect to the home page or film list
-      }
+        const filmId = window.location.pathname.split("/").pop();
+        const response = await fetch(`/api/v1/film/${filmId}`);
+        if (!response.ok) {
+            throw new Error("Failed to fetch film data");
+        }
+        return await response.json();
     } catch (error) {
-      setError(error.message);
+        console.error(error);
+        return null;
     }
-  };
-
-  if (deleted) {
-    return <p>Film deleted successfully.</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
-
-  if (!film) {
-    return <p>Loading...</p>;
-  }
-
-  return (
-    <div>
-      <h1>{film.title}</h1>
-      <p>{film.description}</p>
-      <p><strong>ID:</strong> {film.id}</p>
-      <button onClick={handleDelete}>Delete Film</button>
-      <a href="/">Back to list</a>
-    </div>
-  );
 }
 
-function main() {
-  const rootElt = document.getElementById("app");
-  const root = createRoot(rootElt);
-  root.render(<FilmView />);
+async function deleteFilm() {
+    const filmId = window.location.pathname.split("/").pop();
+    await fetch(`/api/v1/film/${filmId}`, {
+        method: 'DELETE'
+    });
+    window.location.href = "/"; // Redirect after deletion
+}
+
+async function main() {
+    const filmData = await fetchFilmData();
+    if (!filmData) {
+        alert('Failed to load film data.');
+        return;
+    }
+
+    const rootElt = document.getElementById("app");
+    const root = createRoot(rootElt);
+    root.render(
+        <div>
+            <h1>{filmData.title}</h1>
+            <p>{filmData.description}</p>
+            <button onClick={deleteFilm}>Delete Film</button>
+            <a href="/">Back to List View</a>
+        </div>
+    );
 }
 
 window.onload = main;

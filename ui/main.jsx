@@ -20,17 +20,20 @@ async function main() {
 
   // Render the list of films using the FilmEntry component for each film
   root.render(
-    <ul>
-      {films.map((film) => (
-        <li key={film.id}>
-          <FilmEntry
-            id={film.id}
-            title={film.title}
-            description={film.description}
-          />
-        </li>
-      ))}
-    </ul>
+    <div>
+      <h1 className="header-title">List of Films</h1>
+      <ul>
+        {films.map((film) => (
+          <li key={film.id}>
+            <FilmEntry
+              id={film.id}
+              title={film.title}
+              description={film.description}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
 
