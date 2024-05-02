@@ -9,6 +9,8 @@ services:
     depends_on:
       ui:
         condition: service_healthy
+      db:
+        condition: service_healthy
 
   ui:
     image: node:lts
@@ -21,3 +23,13 @@ services:
       timeout: 60s
       interval: 10s
     entrypoint: bash -c "npm ci && npm run dev"
+
+  db:
+    build:
+      context: db
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: "psql -U postgres -h localhost -p 5432"
+      timeout: 60s
+      interval: 10s
